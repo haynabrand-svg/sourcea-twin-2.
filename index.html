@@ -884,31 +884,63 @@
             const Psh = document.getElementById('valPsh').innerText;
             const Ppv = document.getElementById('outPpv').innerText;
             const Qmax = document.getElementById('outQmax').innerText;
+            const eta = document.getElementById('valEff').innerText;
+            const Eh = document.getElementById('outEh').innerText;
+            const Eelec = document.getElementById('outEelec').innerText;
 
-            reportText.innerHTML = `
-=== RAPPORT D'INGÉNIERIE DÉTAILLÉ - SOURCEA 2.0 ===
-Date d'émission   : ${new Date().toLocaleDateString('fr-FR')}
-Statut du Système : SIMULATION INDICATIVE — NON VALIDÉE
+            if (sourceaLanguage === 'en') {
+                reportText.textContent = `
+=== SOURCEA 2.0 — SIMULATION REPORT PREVIEW ===
+Issue date: ${new Date().toLocaleDateString('en-GB')}
+System status: INDICATIVE SIMULATION — NOT VALIDATED
 
-1. PARAMÈTRES DE CONCEPTION :
-   - Volume Quotidien Cible (V)      : ${V}
-   - Hauteur Manométrique Totale (HMT): ${HMT} (valeur saisie ; pertes à vérifier)
-   - Ensoleillement Moyen (PSH)      : ${Psh}
-   - Rendement Global (η_global)     : ${document.getElementById('valEff').innerText}
+1. INPUT PARAMETERS
+   - Target daily volume (V): ${V}
+   - Total dynamic head (TDH): ${HMT} (entered value; losses must be checked)
+   - Peak sun hours (PSH): ${Psh}
+   - Overall efficiency: ${eta}
 
-2. RÉSULTATS ÉNERGÉTIQUES & HYDRAULIQUES :
-   - Énergie Hydraulique Utile (Eh)  : ${document.getElementById('outEh').innerText}
-   - Énergie Électrique Requise      : ${document.getElementById('outEelec').innerText}
-   - Puissance Crête PV Requise (Ppv): ${Ppv}
-   - Débit moyen théorique pendant les PSH (V / PSH)   : ${Qmax}
+2. INDICATIVE ENERGY AND HYDRAULIC RESULTS
+   - Hydraulic energy (Eh): ${Eh}
+   - Required electrical energy: ${Eelec}
+   - Indicative PV peak power (Ppv): ${Ppv}
+   - Theoretical average flow during PSH (V / PSH): ${Qmax}
 
-3. CADRE SANITAIRE ET SÉCURITÉ :
-   - Turbidité et prétraitement       : À mesurer et à dimensionner
-   - Dose UV-C                      : À définir selon le débit, la transmittance UV et le réacteur
-   - Qualité microbiologique        : À vérifier par analyses de laboratoire
+3. WATER SAFETY
+   - Turbidity and pre-treatment: to be measured and designed
+   - UV-C dose: to be determined from flow rate, UV transmittance and reactor specifications
+   - Microbiological quality: to be verified by laboratory testing
+
+NOTE: These results are simplified estimates. They are not a final system design, a performance guarantee or a drinking-water certification.
+                `;
+            } else {
+                reportText.textContent = `
+=== APERÇU DU RAPPORT DE SIMULATION — SOURCEA 2.0 ===
+Date d'émission : ${new Date().toLocaleDateString('fr-FR')}
+Statut du système : SIMULATION INDICATIVE — NON VALIDÉE
+
+1. PARAMÈTRES DE CONCEPTION
+   - Volume quotidien cible (V) : ${V}
+   - Hauteur manométrique totale (HMT) : ${HMT} (valeur saisie ; pertes à vérifier)
+   - Ensoleillement moyen (PSH) : ${Psh}
+   - Rendement global : ${eta}
+
+2. RÉSULTATS ÉNERGÉTIQUES ET HYDRAULIQUES INDICATIFS
+   - Énergie hydraulique (Eh) : ${Eh}
+   - Énergie électrique requise : ${Eelec}
+   - Puissance crête PV indicative (Ppv) : ${Ppv}
+   - Débit moyen théorique pendant les PSH (V / PSH) : ${Qmax}
+
+3. SÉCURITÉ DE L'EAU
+   - Turbidité et prétraitement : à mesurer et à dimensionner
+   - Dose UV-C : à définir selon le débit, la transmittance UV et les caractéristiques du réacteur
+   - Qualité microbiologique : à vérifier par analyses de laboratoire
 
 NOTE : Ces résultats sont des estimations simplifiées. Ils ne constituent ni un dimensionnement final, ni une garantie de performance, ni une certification de potabilité.
-            ` : `\n=== RAPPORT DE SIMULATION DÉTAILLÉ - SOURCEA 2.0 ===\nDate d'émission   : ${new Date().toLocaleDateString('fr-FR')}\nStatut du Système : SIMULATION INDICATIVE — NON VALIDÉE\n\n1. PARAMÈTRES DE CONCEPTION :\n   - Volume Quotidien Cible (V)      : ${V}\n   - Hauteur Manométrique Totale (HMT): ${HMT} (valeur saisie ; pertes à vérifier)\n   - Ensoleillement Moyen (PSH)      : ${Psh}\n   - Rendement Global (η_global)     : ${document.getElementById('valEff').innerText}\n\n2. RÉSULTATS ÉNERGÉTIQUES & HYDRAULIQUES :\n   - Énergie Hydraulique Utile (Eh)  : ${document.getElementById('outEh').innerText}\n   - Énergie Électrique Requise      : ${document.getElementById('outEelec').innerText}\n   - Puissance Crête PV Requise (Ppv): ${Ppv}\n   - Débit moyen théorique pendant les PSH (V / PSH) : ${Qmax}\n\n3. CADRE SANITAIRE ET SÉCURITÉ :\n   - Turbidité et prétraitement       : À mesurer et à dimensionner\n   - Dose UV-C                      : À définir selon le débit, la transmittance UV et le réacteur\n   - Qualité microbiologique        : À vérifier par analyses de laboratoire\n\nNOTE : Ces résultats sont des estimations simplifiées. Ils ne constituent ni un dimensionnement final, ni une garantie de performance, ni une certification de potabilité.\n            `;\n\n            reportModal.classList.remove('hidden');
+                `;
+            }
+
+            reportModal.classList.remove('hidden');
             reportModal.classList.add('flex');
         }
 
