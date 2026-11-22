@@ -535,6 +535,37 @@
                     <path d="M960 280H1000" stroke="#34d399" stroke-width="7" fill="none"/>
                     <path d="M445 300H495 M652 320H710V280 M960 280H1000" stroke="url(#fieldWater)" stroke-width="3" stroke-dasharray="7 7" fill="none" class="flow-line"/>
                     <g fill="#e0f2fe" font-size="12"><text x="445" y="286">Eau brute</text><text x="965" y="265">Eau traitée*</text></g>
+                    <!-- Separate residual collection area: conceptual routing, not a disposal destination -->
+                    <g id="residualsCollectionArea">
+                        <path d="M700 390H985V465H700Z" fill="#111827" fill-opacity=".92" stroke="#fb923c" stroke-width="2" stroke-dasharray="6 4"/>
+                        <text x="710" y="386" fill="#fdba74" font-size="12" font-weight="700">ZONE DE COLLECTE SÉPARÉE — RÉSIDUS</text>
+                        <path d="M735 373V405H750V418 M790 373V405H820V418 M845 373V405H890V418 M900 373V405H960V418" stroke="#fb923c" stroke-width="2.5" stroke-dasharray="5 4" fill="none"/>
+                        <g>
+                            <rect x="716" y="418" width="65" height="35" rx="5" fill="#7c2d12" stroke="#fdba74" stroke-width="1.5"/>
+                            <path d="M722 418V412H775V418" stroke="#fdba74" stroke-width="2" fill="none"/>
+                            <text x="748" y="433" fill="#fff7ed" font-size="9" text-anchor="middle" font-weight="700">BOUES</text>
+                            <text x="748" y="445" fill="#fed7aa" font-size="8" text-anchor="middle">sédiments</text>
+                        </g>
+                        <g>
+                            <rect x="790" y="418" width="65" height="35" rx="5" fill="#713f12" stroke="#fbbf24" stroke-width="1.5"/>
+                            <path d="M796 418V412H849V418" stroke="#fbbf24" stroke-width="2" fill="none"/>
+                            <text x="822" y="433" fill="#fffbeb" font-size="9" text-anchor="middle" font-weight="700">FILTRES</text>
+                            <text x="822" y="445" fill="#fde68a" font-size="8" text-anchor="middle">usagés</text>
+                        </g>
+                        <g>
+                            <rect x="864" y="418" width="65" height="35" rx="5" fill="#1e3a8a" stroke="#93c5fd" stroke-width="1.5"/>
+                            <path d="M870 418V412H923V418" stroke="#93c5fd" stroke-width="2" fill="none"/>
+                            <text x="896" y="433" fill="#eff6ff" font-size="9" text-anchor="middle" font-weight="700">CONCENTRAT</text>
+                            <text x="896" y="445" fill="#bfdbfe" font-size="8" text-anchor="middle">membrane</text>
+                        </g>
+                        <g>
+                            <rect x="938" y="418" width="65" height="35" rx="5" fill="#164e63" stroke="#67e8f9" stroke-width="1.5"/>
+                            <path d="M944 418V412H997V418" stroke="#67e8f9" stroke-width="2" fill="none"/>
+                            <text x="970" y="433" fill="#ecfeff" font-size="9" text-anchor="middle" font-weight="700">LAVAGE</text>
+                            <text x="970" y="445" fill="#a5f3fc" font-size="8" text-anchor="middle">eaux usées</text>
+                        </g>
+                        <text x="710" y="462" fill="#fed7aa" font-size="9">Stockage étanche et protégé — analyses puis filière adaptée</text>
+                    </g>
                     <text x="22" y="475" fill="#cbd5e1" font-size="12">* Le traitement exact et la qualité finale dépendent des analyses de l'eau et du dimensionnement des équipements.</text>
                 </svg>
             </div>
