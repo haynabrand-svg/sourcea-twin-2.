@@ -815,6 +815,7 @@
           }
         }
         document.documentElement.lang = sourceaLanguage;
+        document.title = sourceaLanguage === 'en' ? 'SOURCEA Twin 2.0 - Solar and hydraulic simulation prototype' : 'SOURCEA Twin 2.0 - Prototype de simulation solaire et hydraulique';
         const button = document.getElementById('languageToggle');
         button.textContent = sourceaLanguage === 'en' ? 'FR' : 'EN';
         button.setAttribute('aria-label', sourceaLanguage === 'en' ? 'Switch to French' : 'Switch to English');
