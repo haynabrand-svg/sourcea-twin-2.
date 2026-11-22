@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOURCEA - Jumeau Numérique d'Ingénierie & Télémétrie IoT 2.0</title>
+    <title>SOURCEA Twin 2.0 - Prototype de simulation solaire et hydraulique</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -77,7 +77,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">SOURCEA TWIN 2.0</h1>
-                <p class="text-xs text-gray-400">Jumeau Numérique d'Ingénierie & Pompe Solaire Multi-Barrière</p>
+                <p class="text-xs text-gray-400">Prototype de simulation solaire, pompage et traitement de l'eau</p>
             </div>
         </div>
 
@@ -86,7 +86,7 @@
             <div class="flex items-center space-x-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span class="text-gray-400">Statut :</span>
-                <span class="font-mono text-emerald-400 font-semibold" id="statusText">NOMINAL / VALIDÉ</span>
+                <span class="font-mono text-emerald-400 font-semibold" id="statusText">MODE SIMULATION</span>
             </div>
             <div class="hidden md:flex items-center space-x-2 border-l border-gray-800 pl-4">
                 <i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
@@ -95,7 +95,7 @@
             </div>
             <div class="hidden lg:flex items-center space-x-2 border-l border-gray-800 pl-4">
                 <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i>
-                <span class="text-gray-400">Débit Max Zénith :</span>
+                <span class="text-gray-400">Débit moyen indicatif :</span>
                 <span class="font-mono text-blue-400" id="headerFlow">1.33 m³/h</span>
             </div>
         </div>
@@ -103,7 +103,7 @@
         <div class="flex items-center space-x-3 mt-2 sm:mt-0">
             <button onclick="exportEngineeringReport()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-3.5 py-1.5 rounded-lg text-xs flex items-center space-x-2 transition shadow-md shadow-blue-600/20">
                 <i data-lucide="file-text" class="w-4 h-4"></i>
-                <span>Rapport PDF Exécutif</span>
+                <span>Générer un rapport</span>
             </button>
         </div>
     </header>
@@ -121,7 +121,7 @@
                         <i data-lucide="sliders" class="w-4 h-4 text-blue-400"></i>
                         <span>Variables de Dimensionnement</span>
                     </h2>
-                    <span class="text-[10px] bg-blue-950 text-blue-400 border border-blue-800/50 px-2 py-0.5 rounded font-mono">Modèle Rigoureux</span>
+                    <span class="text-[10px] bg-blue-950 text-blue-400 border border-blue-800/50 px-2 py-0.5 rounded font-mono">Estimation simplifiée</span>
                 </div>
 
                 <div class="space-y-4 text-xs">
@@ -152,7 +152,7 @@
                             <span class="font-mono text-amber-400 font-bold" id="valHmt">15 m</span>
                         </div>
                         <input type="range" id="sliderHmt" min="5" max="50" step="1" value="15" oninput="updateEngineeringModel()" class="w-full accent-amber-500 bg-dark-900 rounded-lg h-2 cursor-pointer">
-                        <p class="text-[10px] text-gray-500 mt-0.5">Inclut Hauteur Géométrique + Pertes de charge Nanofiltration.</p>
+                        <p class="text-[10px] text-gray-500 mt-0.5">Valeur totale indicative à renseigner ; préciser les pertes de charge dans une étude détaillée.</p>
                     </div>
 
                     <!-- Peak Sun Hours (PSH) Slider -->
@@ -191,7 +191,7 @@
             <div class="bg-dark-800 border border-gray-800 rounded-2xl p-5 shadow-xl space-y-3">
                 <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 flex items-center space-x-2 border-b border-gray-800 pb-2">
                     <i data-lucide="cpu" class="w-4 h-4 text-emerald-400"></i>
-                    <span>Résultats d'Ingénierie Validés</span>
+                    <span>Estimations indicatives</span>
                 </h3>
 
                 <div class="grid grid-cols-2 gap-2 text-xs">
@@ -208,7 +208,7 @@
                         <div class="font-mono font-bold text-emerald-400 text-sm mt-0.5" id="outPpv">136 Wp</div>
                     </div>
                     <div class="bg-dark-900 p-2.5 rounded-xl border border-gray-800">
-                        <div class="text-gray-500 text-[10px]">Débit Crête Zénith (Q<sub>max</sub>)</div>
+                        <div class="text-gray-500 text-[10px]">Débit moyen sur PSH (Q<sub>moy</sub>)</div>
                         <div class="font-mono font-bold text-purple-400 text-sm mt-0.5" id="outQmax">1.33 m³/h</div>
                     </div>
                 </div>
@@ -221,8 +221,8 @@
                     <span>Cadre de Sécurité Sanitaire & UV</span>
                 </h3>
                 <p class="text-[11px] text-gray-300 leading-relaxed">
-                    <strong>1. Turbidité & UV-C :</strong> Une pré-filtration sédimentaire &lt; 5 NTU est obligatoire pour éviter l'ombrage des particules.<br>
-                    <strong>2. Validation Microbiologique :</strong> Suivi microbiologique régulier (absence d'<em>E. coli</em>) requis pour certifier la potabilité.
+                    <strong>1. Turbidité & UV-C :</strong> La turbidité doit être mesurée et la préfiltration adaptée au dispositif UV retenu.<br>
+                    <strong>2. Validation microbiologique :</strong> La potabilité doit être confirmée par des analyses en laboratoire et selon les normes locales applicables.
                 </p>
             </div>
 
@@ -240,7 +240,7 @@
                     <p class="text-xs text-gray-400">Représentation physique multi-barrières et conversion d'énergie</p>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <span class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Modèle Autonome ISO 1219</span>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Schéma conceptuel — non coté</span>
                 </div>
             </div>
 
@@ -299,7 +299,7 @@
                     <!-- Step 4 Badge -->
                     <g transform="translate(710, 100)">
                         <rect x="0" y="0" width="120" height="24" rx="12" fill="#10b981" fill-opacity="0.2" stroke="#34d399" stroke-width="1.5"/>
-                        <text x="10" y="16" fill="#34d399" font-size="11" font-weight="bold">4. Eau Potable</text>
+                        <text x="10" y="16" fill="#34d399" font-size="11" font-weight="bold">4. Distribution</text>
                     </g>
 
 
@@ -398,7 +398,7 @@
                         <!-- Tap / Outlet Tube -->
                         <path d="M 32 150 L 55 150 L 55 170" fill="none" stroke="#34d399" stroke-width="4"/>
                         <text x="-15" y="105" fill="#34d399" font-size="11" font-weight="bold">Borne Eau</text>
-                        <text x="-15" y="120" fill="#f8fafc" font-size="9">Potable</text>
+                        <text x="-15" y="120" fill="#f8fafc" font-size="9">À contrôler</text>
                     </g>
 
 
@@ -423,7 +423,7 @@
             <div class="bg-dark-900 border border-gray-800 rounded-xl p-3 text-xs text-gray-400 flex flex-wrap justify-between items-center">
                 <div class="flex items-center space-x-2">
                     <i data-lucide="info" class="w-4 h-4 text-blue-400"></i>
-                    <span>Explication du schéma : Ce parcours en 4 étapes montre comment l'énergie solaire alimente le pompage et la purification multi-barrières pour produire de l'eau potable certifiée.</span>
+                    <span>Explication du schéma : Ce schéma conceptuel illustre un parcours possible : alimentation solaire, pompage, traitement multi-barrières et distribution. Les équipements et la qualité de l'eau doivent être validés pour une installation réelle.</span>
                 </div>
             </div>
 
@@ -472,11 +472,11 @@
             document.getElementById('valPsh').innerText = `${psh.toFixed(1)} h/jour`;
             document.getElementById('valEff').innerText = `${Math.round(eta * 100)} %`;
 
-            // Rigorous Calculations
+            // Estimations simplifiées : hypothèses idéalisées, à confirmer par une étude technique.
             const Eh = (9.81 * V * HMT) / 3600; // kWh/day
             const Eelec = Eh / eta; // kWh/day
             const Ppv = (Eelec / psh) * 1000; // Wp
-            const Qmax = V / psh; // m³/h peak flow rate
+            const Qmax = V / psh; // m³/h : débit moyen théorique pendant les heures de soleil équivalent
 
             // Update Output Metrics
             document.getElementById('outEh').innerText = `${Eh.toFixed(2)} kWh/j`;
@@ -503,11 +503,11 @@
             reportText.innerHTML = `
 === RAPPORT D'INGÉNIERIE DÉTAILLÉ - SOURCEA 2.0 ===
 Date d'émission   : ${new Date().toLocaleDateString('fr-FR')}
-Statut du Système : NOMINAL / RIGOUREUSEMENT VALIDÉ
+Statut du Système : SIMULATION INDICATIVE — NON VALIDÉE
 
 1. PARAMÈTRES DE CONCEPTION :
    - Volume Quotidien Cible (V)      : ${V}
-   - Hauteur Manométrique Totale (HMT): ${HMT} (inclut nanofiltration)
+   - Hauteur Manométrique Totale (HMT): ${HMT} (valeur saisie ; pertes à vérifier)
    - Ensoleillement Moyen (PSH)      : ${Psh}
    - Rendement Global (η_global)     : ${document.getElementById('valEff').innerText}
 
@@ -515,12 +515,14 @@ Statut du Système : NOMINAL / RIGOUREUSEMENT VALIDÉ
    - Énergie Hydraulique Utile (Eh)  : ${document.getElementById('outEh').innerText}
    - Énergie Électrique Requise      : ${document.getElementById('outEelec').innerText}
    - Puissance Crête PV Requise (Ppv): ${Ppv}
-   - Débit Crête Instantané (Qmax)   : ${Qmax}
+   - Débit moyen théorique pendant les PSH (V / PSH)   : ${Qmax}
 
 3. CADRE SANITAIRE ET SÉCURITÉ :
-   - Prétraitement de turbidité      : Requis (< 5 NTU pour efficacité UV-C)
-   - Dose de Désinfection UV-C       : 40 mJ/cm²
-   - Validation Microbiologique      : Absence totale d'E. coli (0 UFC/100 mL)
+   - Turbidité et prétraitement       : À mesurer et à dimensionner
+   - Dose UV-C                      : À définir selon le débit, la transmittance UV et le réacteur
+   - Qualité microbiologique        : À vérifier par analyses de laboratoire
+
+NOTE : Ces résultats sont des estimations simplifiées. Ils ne constituent ni un dimensionnement final, ni une garantie de performance, ni une certification de potabilité.
             `;
 
             reportModal.classList.remove('hidden');
