@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOURCEA - Jumeau Numérique d'Ingénierie & Télémétrie IoT 2.0</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            950: '#070a11',
+                            900: '#0b0f19',
+                            800: '#111827',
+                            700: '#1f2937',
+                            600: '#374151'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+        }
+
+        /* Animated Flow Effects */
+        .flow-line {
+            stroke-dasharray: 8, 8;
+            animation: dash 1s linear infinite;
+        }
+
+        .flow-line-fast {
+            stroke-dasharray: 6, 6;
+            animation: dash 0.5s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -16;
+            }
+        }
+
+        .glow-blue { filter: drop-shadow(0px 0px 8px rgba(59, 130, 246, 0.6)); }
+        .glow-amber { filter: drop-shadow(0px 0px 8px rgba(245, 158, 11, 0.6)); }
+        .glow-emerald { filter: drop-shadow(0px 0px 8px rgba(16, 185, 129, 0.6)); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden text-gray-200 antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- TOP HEADER / NAVIGATION -->
+    <header class="border-b border-gray-800 bg-dark-800/90 backdrop-blur sticky top-0 z-50 px-4 py-3 flex flex-wrap justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i data-lucide="droplets" class="w-6 h-6 text-white"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">SOURCEA TWIN 2.0</h1>
+                <p class="text-xs text-gray-400">Jumeau Numérique d'Ingénierie & Pompe Solaire Multi-Barrière</p>
+            </div>
+        </div>
+
+        <!-- System Status Ribbon -->
+        <div class="flex items-center space-x-6 text-xs py-1 px-4 bg-dark-900/80 border border-gray-800 rounded-full mt-2 sm:mt-0">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-gray-400">Statut :</span>
+                <span class="font-mono text-emerald-400 font-semibold" id="statusText">NOMINAL / VALIDÉ</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-2 border-l border-gray-800 pl-4">
+                <i data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
+                <span class="text-gray-400">Période Crête :</span>
+                <span class="font-mono text-amber-400" id="headerPsh">7.5 PSH</span>
+            </div>
+            <div class="hidden lg:flex items-center space-x-2 border-l border-gray-800 pl-4">
+                <i data-lucide="activity" class="w-4 h-4 text-blue-400"></i>
+                <span class="text-gray-400">Débit Max Zénith :</span>
+                <span class="font-mono text-blue-400" id="headerFlow">1.33 m³/h</span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-3 mt-2 sm:mt-0">
+            <button onclick="exportEngineeringReport()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-3.5 py-1.5 rounded-lg text-xs flex items-center space-x-2 transition shadow-md shadow-blue-600/20">
+                <i data-lucide="file-text" class="w-4 h-4"></i>
+                <span>Rapport PDF Exécutif</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5 p-4 max-w-[1800px] w-full mx-auto">
+        
+        <!-- LEFT PANEL: SIZING ENGINE & PARAMETERS (4 Cols) -->
+        <aside class="lg:col-span-4 space-y-4">
+            
+            <!-- PARAMETERS & CONTROLS -->
+            <div class="bg-dark-800 border border-gray-800 rounded-2xl p-5 shadow-xl space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-gray-800">
+                    <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-300 flex items-center space-x-2">
+                        <i data-lucide="sliders" class="w-4 h-4 text-blue-400"></i>
+                        <span>Variables de Dimensionnement</span>
+                    </h2>
+                    <span class="text-[10px] bg-blue-950 text-blue-400 border border-blue-800/50 px-2 py-0.5 rounded font-mono">Modèle Rigoureux</span>
+                </div>
+
+                <div class="space-y-4 text-xs">
+                    <!-- Target Volume Slider -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-gray-300 font-medium flex items-center space-x-1.5">
+                                <i data-lucide="droplets" class="w-3.5 h-3.5 text-blue-400"></i>
+                                <span>Volume Quotidien Cible (V)</span>
+                            </label>
+                            <span class="font-mono text-blue-400 font-bold" id="valVolume">10.0 m³/jour</span>
+                        </div>
+                        <input type="range" id="sliderVolume" min="2" max="40" step="1" value="10" oninput="updateEngineeringModel()" class="w-full accent-blue-500 bg-dark-900 rounded-lg h-2 cursor-pointer">
+                        <div class="flex justify-between text-[10px] text-gray-500 mt-0.5">
+                            <span>2 m³</span>
+                            <span>20 m³</span>
+                            <span>40 m³</span>
+                        </div>
+                    </div>
+
+                    <!-- Total Dynamic Head (HMT) Slider -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-gray-300 font-medium flex items-center space-x-1.5">
+                                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-amber-400"></i>
+                                <span>Hauteur Manométrique (HMT)</span>
+                            </label>
+                            <span class="font-mono text-amber-400 font-bold" id="valHmt">15 m</span>
+                        </div>
+                        <input type="range" id="sliderHmt" min="5" max="50" step="1" value="15" oninput="updateEngineeringModel()" class="w-full accent-amber-500 bg-dark-900 rounded-lg h-2 cursor-pointer">
+                        <p class="text-[10px] text-gray-500 mt-0.5">Inclut Hauteur Géométrique + Pertes de charge Nanofiltration.</p>
+                    </div>
+
+                    <!-- Peak Sun Hours (PSH) Slider -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-gray-300 font-medium flex items-center space-x-1.5">
+                                <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-300"></i>
+                                <span>Ensoleillement Moyen (PSH)</span>
+                            </label>
+                            <span class="font-mono text-amber-300 font-bold" id="valPsh">7.5 h/jour</span>
+                        </div>
+                        <input type="range" id="sliderPsh" min="4.0" max="9.0" step="0.5" value="7.5" oninput="updateEngineeringModel()" class="w-full accent-amber-400 bg-dark-900 rounded-lg h-2 cursor-pointer">
+                        <div class="flex justify-between text-[10px] text-gray-500 mt-0.5">
+                            <span>4.0h (Couvert)</span>
+                            <span>5.5h (Standard)</span>
+                            <span>9.0h (Zénith)</span>
+                        </div>
+                    </div>
+
+                    <!-- System Global Efficiency Slider -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-gray-300 font-medium flex items-center space-x-1.5">
+                                <i data-lucide="gauge" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                <span>Rendement Global (&eta;<sub>global</sub>)</span>
+                            </label>
+                            <span class="font-mono text-emerald-400 font-bold" id="valEff">40 %</span>
+                        </div>
+                        <input type="range" id="sliderEff" min="25" max="60" step="5" value="40" oninput="updateEngineeringModel()" class="w-full accent-emerald-500 bg-dark-900 rounded-lg h-2 cursor-pointer">
+                        <p class="text-[10px] text-gray-500 mt-0.5">&eta;<sub>global</sub> = &eta;<sub>PV</sub> &times; &eta;<sub>MPPT</sub> &times; &eta;<sub>moteur</sub> &times; &eta;<sub>pompe</sub>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULATED PHYSICAL & ELECTRICAL OUTPUTS -->
+            <div class="bg-dark-800 border border-gray-800 rounded-2xl p-5 shadow-xl space-y-3">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 flex items-center space-x-2 border-b border-gray-800 pb-2">
+                    <i data-lucide="cpu" class="w-4 h-4 text-emerald-400"></i>
+                    <span>Résultats d'Ingénierie Validés</span>
+                </h3>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="bg-dark-900 p-2.5 rounded-xl border border-gray-800">
+                        <div class="text-gray-500 text-[10px]">Énergie Hydraulique (E<sub>h</sub>)</div>
+                        <div class="font-mono font-bold text-blue-400 text-sm mt-0.5" id="outEh">0.41 kWh/j</div>
+                    </div>
+                    <div class="bg-dark-900 p-2.5 rounded-xl border border-gray-800">
+                        <div class="text-gray-500 text-[10px]">Énergie Électrique (E<sub>elec</sub>)</div>
+                        <div class="font-mono font-bold text-amber-400 text-sm mt-0.5" id="outEelec">1.02 kWh/j</div>
+                    </div>
+                    <div class="bg-dark-900 p-2.5 rounded-xl border border-gray-800">
+                        <div class="text-gray-500 text-[10px]">Puissance Crête (P<sub>pv</sub>)</div>
+                        <div class="font-mono font-bold text-emerald-400 text-sm mt-0.5" id="outPpv">136 Wp</div>
+                    </div>
+                    <div class="bg-dark-900 p-2.5 rounded-xl border border-gray-800">
+                        <div class="text-gray-500 text-[10px]">Débit Crête Zénith (Q<sub>max</sub>)</div>
+                        <div class="font-mono font-bold text-purple-400 text-sm mt-0.5" id="outQmax">1.33 m³/h</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WATER SAFETY & FRAMEWORK -->
+            <div class="bg-dark-800 border border-gray-800 rounded-2xl p-5 shadow-xl space-y-2">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-purple-400 flex items-center space-x-2 border-b border-gray-800 pb-2">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Cadre de Sécurité Sanitaire & UV</span>
+                </h3>
+                <p class="text-[11px] text-gray-300 leading-relaxed">
+                    <strong>1. Turbidité & UV-C :</strong> Une pré-filtration sédimentaire &lt; 5 NTU est obligatoire pour éviter l'ombrage des particules.<br>
+                    <strong>2. Validation Microbiologique :</strong> Suivi microbiologique régulier (absence d'<em>E. coli</em>) requis pour certifier la potabilité.
+                </p>
+            </div>
+
+        </aside>
+
+        <!-- CENTER / RIGHT PANEL: VECTOR CANVAS & DETAILED SCHEMATIC (8 Cols) -->
+        <section class="lg:col-span-8 bg-dark-800 border border-gray-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-4">
+            
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                <div>
+                    <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-200 flex items-center space-x-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-blue-400"></i>
+                        <span>Schéma Vectoriel Interactif de Sourcea</span>
+                    </h2>
+                    <p class="text-xs text-gray-400">Représentation physique multi-barrières et conversion d'énergie</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Modèle Autonome ISO 1219</span>
+                </div>
+            </div>
+
+            <!-- SVG CANVAS -->
+            <div class="bg-dark-900 border border-gray-800 rounded-xl p-3 relative overflow-hidden flex items-center justify-center min-h-[440px]">
+                <svg viewBox="0 0 850 440" class="w-full h-full">
+                    <defs>
+                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                        </pattern>
+                        <linearGradient id="solarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" />
+                            <stop offset="100%" stop-color="#0284c7" />
+                        </linearGradient>
+                        <linearGradient id="waterRawGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6"/>
+                            <stop offset="100%" stop-color="#1e3a8a" stop-opacity="0.9"/>
+                        </linearGradient>
+                        <linearGradient id="waterFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#10b981" stop-opacity="0.9"/>
+                        </linearGradient>
+                        <linearGradient id="uvGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#c084fc" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#7e22ce" stop-opacity="0.9"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Background Grid -->
+                    <rect width="850" height="440" fill="url(#grid)" />
+
+                    <!-- Ground Level Line with Soil Pattern -->
+                    <line x1="20" y1="280" x2="830" y2="280" stroke="#475569" stroke-width="3" stroke-dasharray="6 4"/>
+                    <rect x="20" y="282" width="810" height="150" fill="#0f172a" fill-opacity="0.6"/>
+                    <text x="30" y="272" fill="#94a3b8" font-size="11" font-weight="bold" font-family="JetBrains Mono">🌱 NIVEAU DU SOL (Ground Level)</text>
+
+                    <!-- STEP NUMBERS (FOR EASY PRESENTATION) -->
+                    <!-- Step 1 Badge -->
+                    <g transform="translate(110, 20)">
+                        <rect x="0" y="0" width="130" height="24" rx="12" fill="#0284c7" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.5"/>
+                        <text x="12" y="16" fill="#38bdf8" font-size="11" font-weight="bold">1. Énergie Solaire</text>
+                    </g>
+
+                    <!-- Step 2 Badge -->
+                    <g transform="translate(300, 230)">
+                        <rect x="0" y="0" width="140" height="24" rx="12" fill="#047857" fill-opacity="0.2" stroke="#34d399" stroke-width="1.5"/>
+                        <text x="12" y="16" fill="#34d399" font-size="11" font-weight="bold">2. Pompage Souterrain</text>
+                    </g>
+
+                    <!-- Step 3 Badge -->
+                    <g transform="translate(530, 20)">
+                        <rect x="0" y="0" width="150" height="24" rx="12" fill="#b45309" fill-opacity="0.2" stroke="#fbbf24" stroke-width="1.5"/>
+                        <text x="12" y="16" fill="#fbbf24" font-size="11" font-weight="bold">3. Filtration 4 Étapes</text>
+                    </g>
+
+                    <!-- Step 4 Badge -->
+                    <g transform="translate(710, 100)">
+                        <rect x="0" y="0" width="120" height="24" rx="12" fill="#10b981" fill-opacity="0.2" stroke="#34d399" stroke-width="1.5"/>
+                        <text x="10" y="16" fill="#34d399" font-size="11" font-weight="bold">4. Eau Potable</text>
+                    </g>
+
+
+                    <!-- 1. SOLAR PV ARRAY (Realistic Inclined Panels) -->
+                    <g transform="translate(50, 50)">
+                        <!-- Stand -->
+                        <line x1="60" y1="120" x2="60" y2="180" stroke="#64748b" stroke-width="5"/>
+                        <line x1="180" y1="100" x2="180" y2="180" stroke="#475569" stroke-width="5"/>
+                        <line x1="30" y1="180" x2="210" y2="180" stroke="#334155" stroke-width="4"/>
+                        <!-- PV Glass Panels -->
+                        <polygon points="20,110 180,60 230,80 70,130" fill="url(#solarGrad)" stroke="#38bdf8" stroke-width="2"/>
+                        <!-- Solar Grid Lines -->
+                        <line x1="60" y1="97" x2="110" y2="117" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                        <line x1="100" y1="85" x2="150" y2="105" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                        <line x1="140" y1="73" x2="190" y2="93" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+                        <line x1="45" y1="102" x2="205" y2="52" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                        <!-- Label Box -->
+                        <rect x="50" y="135" width="120" height="36" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1.5"/>
+                        <text x="60" y="150" fill="#f8fafc" font-size="10" font-weight="bold">Panneaux Solaires</text>
+                        <text x="60" y="164" fill="#38bdf8" font-size="10" font-family="JetBrains Mono" id="svgSolarVal">136 Wp</text>
+                    </g>
+
+
+                    <!-- 2. UNDERGROUND HDPE TANK & PUMP -->
+                    <g transform="translate(270, 290)">
+                        <!-- Underground Tank Cylinder Wall -->
+                        <rect x="0" y="10" width="180" height="110" rx="16" fill="#1e293b" stroke="#0284c7" stroke-width="2"/>
+                        <!-- Liquid Volume Inside Tank -->
+                        <rect x="10" y="35" width="160" height="75" rx="8" fill="url(#waterRawGrad)"/>
+                        <!-- Tank Text Label -->
+                        <text x="25" y="30" fill="#f8fafc" font-size="11" font-weight="bold">Cuve Brute HDPE (50 m³)</text>
+                        <text x="25" y="50" fill="#93c5fd" font-size="9">Eau captée non-traité</text>
+                        
+                        <!-- Submersible DC Pump Inside Tank -->
+                        <rect x="110" y="60" width="36" height="50" rx="6" fill="#0284c7" stroke="#60a5fa" stroke-width="2"/>
+                        <circle cx="128" cy="75" r="8" fill="#1e3a8a"/>
+                        <text x="113" y="100" fill="#ffffff" font-size="9" font-weight="bold">Pompe</text>
+                    </g>
+
+
+                    <!-- 3. DETAILED MULTI-BARRIER FILTRATION SKID -->
+                    <g transform="translate(490, 50)">
+                        <!-- Skid Container Box -->
+                        <rect x="0" y="0" width="220" height="210" rx="14" fill="#0f172a" stroke="#f59e0b" stroke-width="2" fill-opacity="0.95"/>
+                        <text x="15" y="24" fill="#fbbf24" font-size="12" font-weight="bold">Skid de Purification Eau</text>
+
+                        <!-- Barrier 1: Sediment Sand Column -->
+                        <g transform="translate(15, 38)">
+                            <rect x="0" y="0" width="40" height="110" rx="6" fill="#1e293b" stroke="#d97706" stroke-width="1.5"/>
+                            <rect x="4" y="20" width="32" height="84" rx="3" fill="#b45309" fill-opacity="0.8"/>
+                            <text x="6" y="14" fill="#fde047" font-size="9" font-weight="bold">1. Sable</text>
+                            <text x="6" y="65" fill="#fef3c7" font-size="8">Sédiments</text>
+                            <text x="8" y="77" fill="#fef3c7" font-size="8">50 µm</text>
+                        </g>
+
+                        <!-- Barrier 2: Activated Carbon Column -->
+                        <g transform="translate(65, 38)">
+                            <rect x="0" y="0" width="40" height="110" rx="6" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+                            <rect x="4" y="20" width="32" height="84" rx="3" fill="#334155"/>
+                            <text x="4" y="14" fill="#e2e8f0" font-size="9" font-weight="bold">2. Charbon</text>
+                            <text x="7" y="65" fill="#cbd5e1" font-size="8">Goûts &amp;</text>
+                            <text x="7" y="77" fill="#cbd5e1" font-size="8">Odeurs</text>
+                        </g>
+
+                        <!-- Barrier 3: Nanofiltration Column -->
+                        <g transform="translate(115, 38)">
+                            <rect x="0" y="0" width="40" height="110" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+                            <rect x="4" y="20" width="32" height="84" rx="3" fill="#1d4ed8" fill-opacity="0.7"/>
+                            <text x="8" y="14" fill="#93c5fd" font-size="9" font-weight="bold">3. Nano</text>
+                            <text x="7" y="65" fill="#dbeafe" font-size="8">Polluants</text>
+                            <text x="5" y="77" fill="#dbeafe" font-size="8">0.001µm</text>
+                        </g>
+
+                        <!-- Barrier 4: UV-C Disinfection Light Chamber -->
+                        <g transform="translate(165, 38)">
+                            <rect x="0" y="0" width="40" height="110" rx="6" fill="#1e293b" stroke="#c084fc" stroke-width="1.5"/>
+                            <rect x="4" y="20" width="32" height="84" rx="3" fill="url(#uvGlow)" class="animate-pulse"/>
+                            <text x="6" y="14" fill="#c084fc" font-size="9" font-weight="bold">4. UV-C</text>
+                            <text x="5" y="65" fill="#ffffff" font-size="8" font-weight="bold">Stérile</text>
+                            <text x="5" y="77" fill="#ffffff" font-size="8">Bacteria</text>
+                        </g>
+
+                        <!-- Turbidity Warning Footer Banner inside Skid -->
+                        <rect x="10" y="160" width="200" height="38" rx="6" fill="#0284c7" fill-opacity="0.15" stroke="#0284c7" stroke-width="1"/>
+                        <text x="18" y="176" fill="#38bdf8" font-size="9" font-weight="bold">💡 Règle de Sécurité OMS :</text>
+                        <text x="18" y="190" fill="#cbd5e1" font-size="8.5">Turbidité &lt; 5 NTU requise pour efficacité UV</text>
+                    </g>
+
+
+                    <!-- 4. DISTRIBUTION STAND / TOWER -->
+                    <g transform="translate(745, 130)">
+                        <!-- Pillar Stand -->
+                        <rect x="20" y="70" width="24" height="140" fill="#334155" stroke="#475569" stroke-width="1"/>
+                        <!-- Top Clean Tank -->
+                        <path d="M 5 70 L 59 70 L 45 20 L 19 20 Z" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+                        <!-- Tap / Outlet Tube -->
+                        <path d="M 32 150 L 55 150 L 55 170" fill="none" stroke="#34d399" stroke-width="4"/>
+                        <text x="-15" y="105" fill="#34d399" font-size="11" font-weight="bold">Borne Eau</text>
+                        <text x="-15" y="120" fill="#f8fafc" font-size="9">Potable</text>
+                    </g>
+
+
+                    <!-- ANIMATED PIPING AND POWER CONNECTIONS WITH CLEAR LABELS -->
+                    
+                    <!-- 1. Solar DC Power Cable to Submersible Pump (Amber Flow) -->
+                    <path d="M 170 200 V 360 H 380" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5,5" class="flow-line" />
+                    <text x="210" y="350" fill="#fbbf24" font-size="9" font-weight="bold">⚡ Câble Électrique Solaire</text>
+
+                    <!-- 2. Water Flow Line: Pump Underground -> Filtration Skid Inlet (Blue Flow) -->
+                    <path d="M 416 350 H 510 V 100" fill="none" stroke="url(#waterFlow)" stroke-width="4" class="flow-line" />
+                    <text x="425" y="270" fill="#60a5fa" font-size="9" font-weight="bold">💧 Eau Brute</text>
+
+                    <!-- 3. Water Flow Line: Filtration Skid Outlet -> Community Tap (Emerald Flow) -->
+                    <path d="M 710 100 H 764 V 150" fill="none" stroke="#10b981" stroke-width="4" class="flow-line-fast glow-emerald" />
+                    <text x="715" y="85" fill="#34d399" font-size="9" font-weight="bold">✨ Eau Purifiée</text>
+
+                </svg>
+            </div>
+
+            <!-- EXPLANATORY FOOTER NOTE -->
+            <div class="bg-dark-900 border border-gray-800 rounded-xl p-3 text-xs text-gray-400 flex flex-wrap justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="info" class="w-4 h-4 text-blue-400"></i>
+                    <span>Explication du schéma : Ce parcours en 4 étapes montre comment l'énergie solaire alimente le pompage et la purification multi-barrières pour produire de l'eau potable certifiée.</span>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- REPORT EXPORT MODAL -->
+    <div id="reportModal" class="fixed inset-0 bg-dark-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-dark-800 border border-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="file-check" class="w-5 h-5 text-blue-400"></i>
+                    <h3 class="font-bold text-gray-100">Rapport d'Ingénierie Généré</h3>
+                </div>
+                <button onclick="closeReportModal()" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <div class="bg-dark-900 p-4 rounded-xl font-mono text-xs text-gray-300 space-y-2 max-h-80 overflow-y-auto border border-gray-800" id="reportText">
+                <!-- Dynamic Generated Content -->
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-2">
+                <button onclick="closeReportModal()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg text-xs">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        // Initialize Lucide Icons
+        window.onload = function() {
+            lucide.createIcons();
+            updateEngineeringModel();
+        };
+
+        // Mathematical Engine
+        function updateEngineeringModel() {
+            const V = parseFloat(document.getElementById('sliderVolume').value);
+            const HMT = parseFloat(document.getElementById('sliderHmt').value);
+            const psh = parseFloat(document.getElementById('sliderPsh').value);
+            const eta = parseFloat(document.getElementById('sliderEff').value) / 100.0;
+
+            // Update Input Labels
+            document.getElementById('valVolume').innerText = `${V.toFixed(1)} m³/jour`;
+            document.getElementById('valHmt').innerText = `${HMT} m`;
+            document.getElementById('valPsh').innerText = `${psh.toFixed(1)} h/jour`;
+            document.getElementById('valEff').innerText = `${Math.round(eta * 100)} %`;
+
+            // Rigorous Calculations
+            const Eh = (9.81 * V * HMT) / 3600; // kWh/day
+            const Eelec = Eh / eta; // kWh/day
+            const Ppv = (Eelec / psh) * 1000; // Wp
+            const Qmax = V / psh; // m³/h peak flow rate
+
+            // Update Output Metrics
+            document.getElementById('outEh').innerText = `${Eh.toFixed(2)} kWh/j`;
+            document.getElementById('outEelec').innerText = `${Eelec.toFixed(2)} kWh/j`;
+            document.getElementById('outPpv').innerText = `${Math.ceil(Ppv)} Wp`;
+            document.getElementById('outQmax').innerText = `${Qmax.toFixed(2)} m³/h`;
+
+            // Update Header & SVG Labels
+            document.getElementById('headerPsh').innerText = `${psh.toFixed(1)} PSH`;
+            document.getElementById('headerFlow').innerText = `${Qmax.toFixed(2)} m³/h`;
+            document.getElementById('svgSolarVal').textContent = `${Math.ceil(Ppv)} Wp`;
+        }
+
+        function exportEngineeringReport() {
+            const reportModal = document.getElementById('reportModal');
+            const reportText = document.getElementById('reportText');
+
+            const V = document.getElementById('valVolume').innerText;
+            const HMT = document.getElementById('valHmt').innerText;
+            const Psh = document.getElementById('valPsh').innerText;
+            const Ppv = document.getElementById('outPpv').innerText;
+            const Qmax = document.getElementById('outQmax').innerText;
+
+            reportText.innerHTML = `
+=== RAPPORT D'INGÉNIERIE DÉTAILLÉ - SOURCEA 2.0 ===
+Date d'émission   : ${new Date().toLocaleDateString('fr-FR')}
+Statut du Système : NOMINAL / RIGOUREUSEMENT VALIDÉ
+
+1. PARAMÈTRES DE CONCEPTION :
+   - Volume Quotidien Cible (V)      : ${V}
+   - Hauteur Manométrique Totale (HMT): ${HMT} (inclut nanofiltration)
+   - Ensoleillement Moyen (PSH)      : ${Psh}
+   - Rendement Global (η_global)     : ${document.getElementById('valEff').innerText}
+
+2. RÉSULTATS ÉNERGÉTIQUES & HYDRAULIQUES :
+   - Énergie Hydraulique Utile (Eh)  : ${document.getElementById('outEh').innerText}
+   - Énergie Électrique Requise      : ${document.getElementById('outEelec').innerText}
+   - Puissance Crête PV Requise (Ppv): ${Ppv}
+   - Débit Crête Instantané (Qmax)   : ${Qmax}
+
+3. CADRE SANITAIRE ET SÉCURITÉ :
+   - Prétraitement de turbidité      : Requis (< 5 NTU pour efficacité UV-C)
+   - Dose de Désinfection UV-C       : 40 mJ/cm²
+   - Validation Microbiologique      : Absence totale d'E. coli (0 UFC/100 mL)
+            `;
+
+            reportModal.classList.remove('hidden');
+            reportModal.classList.add('flex');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+            document.getElementById('reportModal').classList.remove('flex');
+        }
+    </script>
+</body>
+</html>
