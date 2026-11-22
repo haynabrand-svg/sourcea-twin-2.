@@ -112,6 +112,7 @@
         </div>
 
         <div class="flex items-center space-x-3 mt-2 sm:mt-0">
+            <button id="languageToggle" type="button" onclick="toggleLanguage()" class="border border-gray-600 text-gray-200 font-semibold px-3 py-1.5 rounded-lg text-xs">EN</button>
             <button onclick="exportEngineeringReport()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-3.5 py-1.5 rounded-lg text-xs flex items-center space-x-2 transition shadow-md shadow-blue-600/20">
                 <i data-lucide="file-text" class="w-4 h-4"></i>
                 <span>Générer un rapport</span>
@@ -551,7 +552,7 @@
                 </h2>
                 <p class="text-xs text-gray-400 mt-1">Choisissez une étape pour découvrir son rôle dans le système.</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3" id="learningCards">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6 gap-3" id="learningCards">
                 <button class="learning-card" type="button" data-topic="solar" aria-expanded="true" aria-controls="learningDetail">
                     <span class="text-amber-300 text-xs font-semibold">01 · ÉNERGIE</span><span class="block text-sm font-semibold text-white mt-2">Énergie solaire</span><span class="block text-xs text-gray-400 mt-1">Comment le soleil alimente le système.</span>
                 </button>
@@ -566,6 +567,9 @@
                 </button>
                 <button class="learning-card" type="button" data-topic="safety" aria-expanded="false" aria-controls="learningDetail">
                     <span class="text-violet-300 text-xs font-semibold">05 · CONTRÔLE</span><span class="block text-sm font-semibold text-white mt-2">Qualité de l'eau</span><span class="block text-xs text-gray-400 mt-1">Comment vérifier que l'eau est sûre.</span>
+                </button>
+                <button class="learning-card" type="button" data-topic="waste" aria-expanded="false" aria-controls="learningDetail">
+                    <span class="text-orange-300 text-xs font-semibold">06 · ENVIRONNEMENT</span><span class="block text-sm font-semibold text-white mt-2">Résidus &amp; déchets</span><span class="block text-xs text-gray-400 mt-1">Que deviennent les matières retirées de l'eau ?</span>
                 </button>
             </div>
             <div id="learningDetail" class="bg-dark-900 border border-gray-700 rounded-xl p-4 sm:p-5" aria-live="polite">
@@ -588,6 +592,15 @@
                 <div class="learning-detail" data-detail="safety">
                     <h3 class="text-sm font-semibold text-violet-300 mb-2">Comment vérifier la qualité de l'eau ?</h3>
                     <p class="text-sm text-gray-300 leading-relaxed">La présence d'un dispositif de filtration ou d'UV ne suffit pas à garantir la potabilité. Il faut analyser l'eau brute, choisir un traitement adapté, surveiller les paramètres pertinents et faire réaliser des analyses de contrôle, notamment microbiologiques, selon les exigences locales. La qualité finale doit être confirmée avant toute déclaration de potabilité.</p>
+                </div>
+                <div class="learning-detail" data-detail="waste">
+                    <h3 class="text-sm font-semibold text-orange-300 mb-2">Que deviennent les résidus du traitement ?</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">Les résidus ne doivent pas être rejetés automatiquement dans le sol ou dans l'eau. Les boues et sédiments doivent être recueillis, caractérisés et égouttés dans une zone adaptée ; leur destination dépend de leur composition. Les cartouches et médias filtrants usagés doivent être stockés séparément puis remis à une filière de collecte ou de traitement appropriée. Le concentrat de nanofiltration et les eaux de lavage doivent être collectés et caractérisés : leur traitement ou leur évacuation exige une solution autorisée, définie selon les contaminants, les volumes et les règles locales. La réutilisation n'est envisageable qu'après vérification de leur innocuité. Le site doit prévoir des contenants étanches, une zone protégée et une traçabilité des enlèvements.</p>
+                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <div class="rounded-lg border border-orange-900/70 bg-orange-950/30 p-3"><strong class="text-orange-200">Collecter séparément</strong><p class="text-gray-300 mt-1">Boues, filtres usagés, concentrat et eaux de lavage peuvent nécessiter des filières différentes.</p></div>
+                        <div class="rounded-lg border border-emerald-900/70 bg-emerald-950/30 p-3"><strong class="text-emerald-200">Éviter les rejets non contrôlés</strong><p class="text-gray-300 mt-1">Pas de déversement direct dans le sol, les caniveaux, les cours d'eau ou les zones naturelles.</p></div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-3">La filière finale devra être déterminée après analyses et vérification des opérateurs et exigences réglementaires disponibles au Sénégal. Cette maquette ne désigne pas encore de prestataire ni de site d'élimination.</p>
                 </div>
             </div>
         </div>
@@ -613,6 +626,49 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+      let sourceaLanguage = 'fr';
+      const sourceaTranslations = {
+        en: {
+          'header .header-subtitle': 'Solar-powered water pumping and treatment simulation prototype',
+          '#learningCards [data-topic="solar"] span:nth-child(2)': 'Solar energy',
+          '#learningCards [data-topic="solar"] span:nth-child(3)': 'How sunlight powers the system.',
+          '#learningCards [data-topic="pumping"] span:nth-child(2)': 'Pumping',
+          '#learningCards [data-topic="pumping"] span:nth-child(3)': 'How water is lifted from the borehole.',
+          '#learningCards [data-topic="filtration"] span:nth-child(2)': 'Filtration',
+          '#learningCards [data-topic="filtration"] span:nth-child(3)': 'The role of the different treatment barriers.',
+          '#learningCards [data-topic="storage"] span:nth-child(2)': 'Storage & distribution',
+          '#learningCards [data-topic="storage"] span:nth-child(3)': 'How water is stored and delivered.',
+          '#learningCards [data-topic="safety"] span:nth-child(2)': 'Water quality',
+          '#learningCards [data-topic="safety"] span:nth-child(3)': 'How to check that water is safe.',
+          '#learningCards [data-topic="waste"] span:nth-child(2)': 'Residuals & waste',
+          '#learningCards [data-topic="waste"] span:nth-child(3)': 'What happens to materials removed from water?',
+          '[data-detail="waste"] h3': 'What happens to treatment residuals?',
+          '[data-detail="waste"] > p': 'Residuals must not be automatically discharged into soil or water. Sludge and sediment should be collected, characterised and dewatered in a suitable area; their destination depends on their composition. Used cartridges and filter media should be stored separately and sent to an appropriate collection or treatment route. Nanofiltration concentrate and backwash water must be collected and characterised: treatment or disposal requires an authorised solution based on contaminants, volumes and local rules. Reuse is only possible after safety checks. The site should provide sealed containers, a protected storage area and collection records.',
+          '[data-detail="waste"] div div:first-child strong': 'Collect separately',
+          '[data-detail="waste"] div div:first-child p': 'Sludge, used filters, concentrate and backwash water may require different routes.',
+          '[data-detail="waste"] div div:nth-child(2) strong': 'Prevent uncontrolled discharge',
+          '[data-detail="waste"] div div:nth-child(2) p': 'No direct discharge into soil, drains, waterways or natural areas.',
+          '[data-detail="waste"] > p:last-child': 'The final route must be determined after testing and verification of available operators and applicable requirements in Senegal. This prototype does not yet identify a contractor or disposal site.'
+        }
+      };
+      const sourceaFrench = new Map();
+      function toggleLanguage() {
+        sourceaLanguage = sourceaLanguage === 'fr' ? 'en' : 'fr';
+        for (const [selector, english] of Object.entries(sourceaTranslations.en)) {
+          const element = document.querySelector(selector);
+          if (!element) continue;
+          if (!sourceaFrench.has(selector)) sourceaFrench.set(selector, element.textContent);
+          element.textContent = sourceaLanguage === 'en' ? english : sourceaFrench.get(selector);
+        }
+        document.documentElement.lang = sourceaLanguage;
+        const button = document.getElementById('languageToggle');
+        button.textContent = sourceaLanguage === 'en' ? 'FR' : 'EN';
+        button.setAttribute('aria-label', sourceaLanguage === 'en' ? 'Switch to French' : 'Switch to English');
+      }
+    </script>
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
