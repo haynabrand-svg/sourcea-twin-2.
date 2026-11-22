@@ -661,43 +661,164 @@
 
     <script>
       let sourceaLanguage = 'fr';
-      const sourceaTranslations = {
-        en: {
-          'header .header-subtitle': 'Solar-powered water pumping and treatment simulation prototype',
-          '#learningCards [data-topic="solar"] span:nth-child(2)': 'Solar energy',
-          '#learningCards [data-topic="solar"] span:nth-child(3)': 'How sunlight powers the system.',
-          '#learningCards [data-topic="pumping"] span:nth-child(2)': 'Pumping',
-          '#learningCards [data-topic="pumping"] span:nth-child(3)': 'How water is lifted from the borehole.',
-          '#learningCards [data-topic="filtration"] span:nth-child(2)': 'Filtration',
-          '#learningCards [data-topic="filtration"] span:nth-child(3)': 'The role of the different treatment barriers.',
-          '#learningCards [data-topic="storage"] span:nth-child(2)': 'Storage & distribution',
-          '#learningCards [data-topic="storage"] span:nth-child(3)': 'How water is stored and delivered.',
-          '#learningCards [data-topic="safety"] span:nth-child(2)': 'Water quality',
-          '#learningCards [data-topic="safety"] span:nth-child(3)': 'How to check that water is safe.',
-          '#learningCards [data-topic="waste"] span:nth-child(2)': 'Residuals & waste',
-          '#learningCards [data-topic="waste"] span:nth-child(3)': 'What happens to materials removed from water?',
-          '[data-detail="waste"] h3': 'What happens to treatment residuals?',
-          '[data-detail="waste"] > p': 'Residuals must not be automatically discharged into soil or water. Sludge and sediment should be collected, characterised and dewatered in a suitable area; their destination depends on their composition. Used cartridges and filter media should be stored separately and sent to an appropriate collection or treatment route. Nanofiltration concentrate and backwash water must be collected and characterised: treatment or disposal requires an authorised solution based on contaminants, volumes and local rules. Reuse is only possible after safety checks. The site should provide sealed containers, a protected storage area and collection records.',
-          '[data-detail="waste"] div div:first-child strong': 'Collect separately',
-          '[data-detail="waste"] div div:first-child p': 'Sludge, used filters, concentrate and backwash water may require different routes.',
-          '[data-detail="waste"] div div:nth-child(2) strong': 'Prevent uncontrolled discharge',
-          '[data-detail="waste"] div div:nth-child(2) p': 'No direct discharge into soil, drains, waterways or natural areas.',
-          '[data-detail="waste"] > p:last-child': 'The final route must be determined after testing and verification of available operators and applicable requirements in Senegal. This prototype does not yet identify a contractor or disposal site.'
-        }
+      const sourceaEnglish = {
+        "Prototype de simulation solaire, pompage et traitement de l'eau":"Solar-powered water pumping and treatment simulation prototype",
+        "Statut :":"Status:",
+        "MODE SIMULATION":"SIMULATION MODE",
+        "Période Crête :":"Peak Sun Hours:",
+        "Débit moyen indicatif :":"Indicative average flow:",
+        "Générer un rapport":"View simulation report",
+        "Variables de Dimensionnement":"Sizing Parameters",
+        "Estimation simplifiée":"Simplified estimate",
+        "Volume Quotidien Cible (V)":"Target Daily Volume (V)",
+        "m³/jour":"m³/day",
+        "Hauteur Manométrique (HMT)":"Total Dynamic Head (TDH)",
+        "Valeur totale indicative à renseigner ; préciser les pertes de charge dans une étude détaillée.":"Indicative total value to be entered; head losses should be specified in a detailed study.",
+        "Ensoleillement Moyen (PSH)":"Peak Sun Hours (PSH)",
+        "h/jour":"h/day",
+        "4.0h (Couvert)":"4.0 h (Cloudy)",
+        "5.5h (Standard)":"5.5 h (Typical)",
+        "9.0h (Zénith)":"9.0 h (Peak)",
+        "Rendement Global (":"Overall Efficiency (",
+        "Estimations indicatives":"Indicative estimates",
+        "Énergie Hydraulique (":"Hydraulic Energy (",
+        "Énergie Électrique (":"Electrical Energy (",
+        "Puissance Crête (":"Peak Power (",
+        "Débit moyen sur PSH (":"Average Flow over PSH (",
+        "Cadre de Sécurité Sanitaire & UV":"Water Safety & UV Requirements",
+        "1. Turbidité & UV-C :":"1. Turbidity & UV-C:",
+        " La turbidité doit être mesurée et la préfiltration adaptée au dispositif UV retenu.":" Turbidity must be measured and pre-filtration adapted to the selected UV unit.",
+        "2. Validation microbiologique :":"2. Microbiological validation:",
+        " La potabilité doit être confirmée par des analyses en laboratoire et selon les normes locales applicables.":" Water potability must be confirmed by laboratory testing and applicable local standards.",
+        "Schéma Vectoriel Interactif de Sourcea":"SOURCEA Interactive System Diagram",
+        "Représentation physique multi-barrières et conversion d'énergie":"Conceptual multi-barrier treatment and energy-conversion layout",
+        "Schéma conceptuel — non coté":"Conceptual diagram — not to scale",
+        "🌱 NIVEAU DU SOL (Ground Level)":"🌱 GROUND LEVEL",
+        "1. Énergie Solaire":"1. Solar Energy",
+        "2. Pompage Souterrain":"2. Groundwater Pumping",
+        "3. Filtration 4 Étapes":"3. Four-Stage Treatment",
+        "4. Distribution":"4. Distribution",
+        "Panneaux Solaires":"Solar Panels",
+        "Cuve Brute HDPE (50 m³)":"Raw Water HDPE Tank (50 m³)",
+        "Eau captée non-traité":"Untreated abstracted water",
+        "Pompe":"Pump",
+        "Skid de Purification Eau":"Water Treatment Unit",
+        "1. Sable":"1. Sand",
+        "Sédiments":"Sediment",
+        "2. Charbon":"2. Activated Carbon",
+        "Goûts &":"Taste &",
+        "Odeurs":"Odours",
+        "3. Nano":"3. Nano",
+        "Polluants":"Contaminants",
+        "4. UV-C":"4. UV-C",
+        "Stérile":"Disinfection",
+        "Bacteria":"Microorganisms",
+        "💡 Règle de Sécurité OMS :":"💡 Water Safety Note:",
+        "Turbidité < 5 NTU requise pour efficacité UV":"UV performance depends on turbidity and the selected reactor specifications",
+        "Borne Eau":"Water Point",
+        "À contrôler":"To be checked",
+        "⚡ Câble Électrique Solaire":"⚡ Solar Electrical Cable",
+        "💧 Eau Brute":"💧 Raw Water",
+        "✨ Eau Purifiée":"✨ Treated Water",
+        "Explication du schéma : Ce schéma conceptuel illustre un parcours possible : alimentation solaire, pompage, traitement multi-barrières et distribution. Les équipements et la qualité de l'eau doivent être validés pour une installation réelle.":"Diagram explanation: This conceptual diagram illustrates one possible process: solar power, pumping, multi-barrier treatment and distribution. Equipment selection and water quality must be validated for a real installation.",
+        "Vue d'ensemble du système sur le terrain":"System Overview — Field View",
+        "Illustration d'un système regroupé, avec ses équipements reliés entre eux.":"Illustration of a grouped system with interconnected equipment.",
+        "Vue d'ambiance — non cotée":"Illustrative view — not to scale",
+        "Terrain — représentation illustrative":"Site — illustrative representation",
+        "Panneaux solaires":"Solar panels",
+        "Production électrique":"Electricity generation",
+        "Forage &":"Borehole &",
+        "pompe":"pump",
+        "Captage de l'eau brute":"Raw water abstraction",
+        "Cuve":"Tank",
+        "Stockage":"Storage",
+        "Réserve d'eau":"Water reserve",
+        "Sable":"Sand",
+        "Charbon":"Carbon",
+        "Membrane":"Membrane",
+        "Unité de traitement":"Treatment unit",
+        "Prétraitement + barrières adaptées":"Pre-treatment + appropriate barriers",
+        "Distribution":"Distribution",
+        "Point d'eau":"Water point",
+        "Câble électrique":"Electrical cable",
+        "Eau brute":"Raw water",
+        "Eau traitée*":"Treated water*",
+        "ZONE DE COLLECTE SÉPARÉE — RÉSIDUS":"SEPARATE RESIDUALS COLLECTION AREA",
+        "BOUES":"SLUDGE",
+        "sédiments":"sediment",
+        "FILTRES":"FILTERS",
+        "usagés":"used",
+        "CONCENTRAT":"CONCENTRATE",
+        "membrane":"membrane",
+        "LAVAGE":"BACKWASH",
+        "eaux usées":"wash water",
+        "Stockage étanche et protégé — analyses puis filière adaptée":"Sealed, protected storage — testing, then an appropriate disposal route",
+        "* Le traitement exact et la qualité finale dépendent des analyses de l'eau et du dimensionnement des équipements.":"* The treatment process and final water quality depend on water testing and equipment design.",
+        "Cette vue rassemble les principaux blocs pour faciliter la compréhension. Elle ne représente pas un plan d'implantation, des distances réelles, ni une installation validée pour la construction.":"This view brings the main components together for clarity. It is not a site layout, does not show actual distances and is not a construction-approved installation design.",
+        "Comprendre le fonctionnement de SOURCEA":"Understanding How SOURCEA Works",
+        "Choisissez une étape pour découvrir son rôle dans le système.":"Select a stage to learn about its role in the system.",
+        "01 · ÉNERGIE":"01 · ENERGY",
+        "Énergie solaire":"Solar energy",
+        "Comment le soleil alimente le système.":"How sunlight powers the system.",
+        "02 · CAPTAGE":"02 · ABSTRACTION",
+        "Pompage":"Pumping",
+        "Comment l'eau remonte du forage.":"How water is pumped from the borehole.",
+        "03 · TRAITEMENT":"03 · TREATMENT",
+        "Filtration":"Filtration",
+        "Le rôle des différentes barrières.":"The role of the different treatment barriers.",
+        "04 · STOCKAGE":"04 · STORAGE",
+        "Stockage & distribution":"Storage & distribution",
+        "Comment l'eau est conservée et distribuée.":"How water is stored and distributed.",
+        "05 · CONTRÔLE":"05 · MONITORING",
+        "Qualité de l'eau":"Water quality",
+        "Comment vérifier que l'eau est sûre.":"How to check whether water is safe.",
+        "06 · ENVIRONNEMENT":"06 · ENVIRONMENT",
+        "Résidus & déchets":"Residuals & waste",
+        "Que deviennent les matières retirées de l'eau ?":"What happens to materials removed from the water?",
+        "Comment fonctionne l'énergie solaire ?":"How does solar energy work?",
+        "Les panneaux photovoltaïques convertissent la lumière du soleil en électricité. Un régulateur ou contrôleur adapté gère l'alimentation de la pompe. Selon l'architecture retenue, un stockage électrique ou un fonctionnement direct peut être prévu. La puissance réelle doit être calculée à partir des besoins de la pompe, de l'ensoleillement local et des pertes du système.":"Photovoltaic panels convert sunlight into electricity. A suitable controller manages the pump's power supply. Depending on the system design, electrical storage or direct operation may be used. The actual power requirement must be calculated from the pump's needs, local solar conditions and system losses.",
+        "Comment fonctionne le pompage ?":"How does pumping work?",
+        "Une pompe adaptée est installée dans le forage ou le point de captage. Alimentée par le système électrique, elle pousse l'eau vers une cuve ou vers l'étape suivante. Le choix de la pompe dépend notamment du niveau d'eau, de la hauteur de refoulement, des pertes de charge et du débit souhaité.":"A suitable pump is installed in the borehole or at the abstraction point. Powered by the electrical system, it moves water to a tank or to the next treatment stage. Pump selection depends on factors including the water level, delivery head, head losses and required flow rate.",
+        "Comment fonctionne la filtration ?":"How does filtration work?",
+        "Le traitement se choisit selon les résultats d'analyse de l'eau brute. Un filtre à sable peut retenir certaines particules en suspension ; le charbon actif peut réduire certains composés responsables du goût ou de l'odeur ; une membrane de nanofiltration peut retenir certains sels et contaminants selon ses caractéristiques ; un réacteur UV correctement dimensionné peut contribuer à la désinfection. Ces étapes ne sont pas universelles : leur ordre, leur pertinence et leurs paramètres doivent être confirmés par une étude de l'eau.":"Treatment is selected according to raw-water test results. A sand filter can retain some suspended particles; activated carbon can reduce certain compounds that affect taste or odour; a nanofiltration membrane can retain certain salts and contaminants depending on its specifications; and a properly sized UV reactor can contribute to disinfection. These stages are not universal: their order, suitability and operating parameters must be confirmed by a water assessment.",
+        "Pourquoi stocker et distribuer l'eau ?":"Why store and distribute water?",
+        "Une cuve permet de constituer une réserve et de mieux adapter la disponibilité de l'eau aux besoins. Des conduites acheminent ensuite l'eau vers les points d'utilisation. Le volume de stockage, les matériaux, la protection contre les contaminations et le réseau de distribution doivent être définis selon le site et les usages.":"A tank provides a reserve and helps match water availability to demand. Pipes then carry the water to points of use. Storage volume, materials, protection against contamination and the distribution network must be defined according to the site and intended uses.",
+        "Comment vérifier la qualité de l'eau ?":"How can water quality be checked?",
+        "La présence d'un dispositif de filtration ou d'UV ne suffit pas à garantir la potabilité. Il faut analyser l'eau brute, choisir un traitement adapté, surveiller les paramètres pertinents et faire réaliser des analyses de contrôle, notamment microbiologiques, selon les exigences locales. La qualité finale doit être confirmée avant toute déclaration de potabilité.":"The presence of filtration or UV equipment does not by itself guarantee that water is potable. Raw water must be tested, an appropriate treatment selected, relevant parameters monitored and control tests — including microbiological tests — carried out in line with local requirements. Final quality must be confirmed before the water is described as potable.",
+        "Que deviennent les résidus du traitement ?":"What happens to treatment residuals?",
+        "Les résidus ne doivent pas être rejetés automatiquement dans le sol ou dans l'eau. Les boues et sédiments doivent être recueillis, caractérisés et égouttés dans une zone adaptée ; leur destination dépend de leur composition. Les cartouches et médias filtrants usagés doivent être stockés séparément puis remis à une filière de collecte ou de traitement appropriée. Le concentrat de nanofiltration et les eaux de lavage doivent être collectés et caractérisés : leur traitement ou leur évacuation exige une solution autorisée, définie selon les contaminants, les volumes et les règles locales. La réutilisation n'est envisageable qu'après vérification de leur innocuité. Le site doit prévoir des contenants étanches, une zone protégée et une traçabilité des enlèvements.":"Residuals must not be automatically discharged into soil or water. Sludge and sediment should be collected, characterised and drained in a suitable area; their destination depends on their composition. Used cartridges and filter media should be stored separately and sent to an appropriate collection or treatment route. Nanofiltration concentrate and wash water must be collected and characterised: treatment or disposal requires an authorised solution based on contaminants, volumes and local rules. Reuse is only possible after safety checks. The site should provide sealed containers, a protected storage area and collection records.",
+        "Collecter séparément":"Collect separately",
+        "Boues, filtres usagés, concentrat et eaux de lavage peuvent nécessiter des filières différentes.":"Sludge, used filters, concentrate and wash water may require different disposal routes.",
+        "Éviter les rejets non contrôlés":"Prevent uncontrolled discharge",
+        "Pas de déversement direct dans le sol, les caniveaux, les cours d'eau ou les zones naturelles.":"No direct discharge into soil, drains, waterways or natural areas.",
+        "La filière finale devra être déterminée après analyses et vérification des opérateurs et exigences réglementaires disponibles au Sénégal. Cette maquette ne désigne pas encore de prestataire ni de site d'élimination.":"The final route must be determined after testing and verification of available operators and applicable requirements in Senegal. This prototype does not yet identify a contractor or disposal site.",
+        "Rapport d'Ingénierie Généré":"Simulation Report Preview",
+        "Fermer":"Close"
       };
-      const sourceaFrench = new Map();
+      const sourceaOriginalText = new Map();
       function toggleLanguage() {
         sourceaLanguage = sourceaLanguage === 'fr' ? 'en' : 'fr';
-        for (const [selector, english] of Object.entries(sourceaTranslations.en)) {
-          const element = document.querySelector(selector);
-          if (!element) continue;
-          if (!sourceaFrench.has(selector)) sourceaFrench.set(selector, element.textContent);
-          element.textContent = sourceaLanguage === 'en' ? english : sourceaFrench.get(selector);
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        let node;
+        while ((node = walker.nextNode())) {
+          const parent = node.parentElement;
+          if (!parent || parent.closest('script,style')) continue;
+          if (!sourceaOriginalText.has(node)) sourceaOriginalText.set(node, node.nodeValue);
+          const original = sourceaOriginalText.get(node);
+          const trimmed = original.trim();
+          const leading = original.match(/^\s*/)?.[0] || '';
+          const trailing = original.match(/\s*$/)?.[0] || '';
+          if (sourceaLanguage === 'en' && Object.prototype.hasOwnProperty.call(sourceaEnglish, trimmed)) {
+            node.nodeValue = leading + sourceaEnglish[trimmed] + trailing;
+          } else if (sourceaLanguage === 'fr') {
+            node.nodeValue = original;
+          }
         }
         document.documentElement.lang = sourceaLanguage;
         const button = document.getElementById('languageToggle');
         button.textContent = sourceaLanguage === 'en' ? 'FR' : 'EN';
         button.setAttribute('aria-label', sourceaLanguage === 'en' ? 'Switch to French' : 'Switch to English');
+        updateEngineeringModel();
       }
     </script>
 
@@ -731,9 +852,9 @@
             const eta = parseFloat(document.getElementById('sliderEff').value) / 100.0;
 
             // Update Input Labels
-            document.getElementById('valVolume').innerText = `${V.toFixed(1)} m³/jour`;
+            document.getElementById('valVolume').innerText = `${V.toFixed(1)} m³/${sourceaLanguage === 'en' ? 'day' : 'jour'}`;
             document.getElementById('valHmt').innerText = `${HMT} m`;
-            document.getElementById('valPsh').innerText = `${psh.toFixed(1)} h/jour`;
+            document.getElementById('valPsh').innerText = `${psh.toFixed(1)} h/${sourceaLanguage === 'en' ? 'day' : 'jour'}`;
             document.getElementById('valEff').innerText = `${Math.round(eta * 100)} %`;
 
             // Estimations simplifiées : hypothèses idéalisées, à confirmer par une étude technique.
@@ -787,9 +908,7 @@ Statut du Système : SIMULATION INDICATIVE — NON VALIDÉE
    - Qualité microbiologique        : À vérifier par analyses de laboratoire
 
 NOTE : Ces résultats sont des estimations simplifiées. Ils ne constituent ni un dimensionnement final, ni une garantie de performance, ni une certification de potabilité.
-            `;
-
-            reportModal.classList.remove('hidden');
+            ` : `\n=== RAPPORT DE SIMULATION DÉTAILLÉ - SOURCEA 2.0 ===\nDate d'émission   : ${new Date().toLocaleDateString('fr-FR')}\nStatut du Système : SIMULATION INDICATIVE — NON VALIDÉE\n\n1. PARAMÈTRES DE CONCEPTION :\n   - Volume Quotidien Cible (V)      : ${V}\n   - Hauteur Manométrique Totale (HMT): ${HMT} (valeur saisie ; pertes à vérifier)\n   - Ensoleillement Moyen (PSH)      : ${Psh}\n   - Rendement Global (η_global)     : ${document.getElementById('valEff').innerText}\n\n2. RÉSULTATS ÉNERGÉTIQUES & HYDRAULIQUES :\n   - Énergie Hydraulique Utile (Eh)  : ${document.getElementById('outEh').innerText}\n   - Énergie Électrique Requise      : ${document.getElementById('outEelec').innerText}\n   - Puissance Crête PV Requise (Ppv): ${Ppv}\n   - Débit moyen théorique pendant les PSH (V / PSH) : ${Qmax}\n\n3. CADRE SANITAIRE ET SÉCURITÉ :\n   - Turbidité et prétraitement       : À mesurer et à dimensionner\n   - Dose UV-C                      : À définir selon le débit, la transmittance UV et le réacteur\n   - Qualité microbiologique        : À vérifier par analyses de laboratoire\n\nNOTE : Ces résultats sont des estimations simplifiées. Ils ne constituent ni un dimensionnement final, ni une garantie de performance, ni une certification de potabilité.\n            `;\n\n            reportModal.classList.remove('hidden');
             reportModal.classList.add('flex');
         }
 
